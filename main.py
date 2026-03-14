@@ -120,7 +120,7 @@ while True:
     for entry in new_entries[::-1]:
         app       = entry[0].strip()
         phone     = entry[1].strip()
-        full_msg  = entry[2].strip().replace('\n', ' ').replace('  ', ' ')
+        full_msg  = entry[2].strip().replace('  ', ' ')
         timestamp = entry[3]
 
         # Country detection
@@ -154,17 +154,19 @@ while True:
 
         otp = re.sub(r'[- ]', '', otp)
 
-        text = f"""✉️ *New {escape_v2(app)} OTP Received*
+        # Escape message for MarkdownV2
+        safe_msg = escape_v2(full_msg).replace('\n', '\\n')
 
-> *Time:* {escape_v2(timestamp)} ""
-> *Country:* {escape_v2(country)}, {flag} ""
-> *Service:* {escape_v2(app)} ""
-> *Number:* `{escape_v2(masked_phone)}` ""
-> *OTP:* ```{escape_v2(otp)}``` ""
-> *Message:* ""
-> {escape_v2(full_msg.replace('n', '\\n').replace('  ', ' '))}
-
-──────────────────────────────"""
+        text = (
+            f"✉️ *New {escape_v2(app)} OTP Received*\n\n"
+            f"> *Time:* {escape_v2(timestamp)}\n"
+            f"> *Country:* {escape_v2(country)}, {flag}\n"
+            f"> *Service:* {escape_v2(app)}\n"
+            f"> *Number:* `{escape_v2(masked_phone)}`\n"
+            f"> *OTP:* ```{escape_v2(otp)}```\n"
+            f"> *Message:*\n{safe_msg}\n\n"
+            "──────────────────────────────"
+        )
 
         keyboard = [
             [InlineKeyboardButton("Main Channel", url="https://t.me/mrchd112")]
