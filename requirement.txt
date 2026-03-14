@@ -1,0 +1,4 @@
+# requirements.txt
+
+requests==2.32.0
+python-telegram-bot==20.4 
